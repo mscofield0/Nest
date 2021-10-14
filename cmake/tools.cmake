@@ -13,10 +13,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/CPM.cmake)
 if(USE_SANITIZER OR USE_STATIC_ANALYZER)
   CPMAddPackage("gh:StableCoder/cmake-scripts#1f822d1fc87c8d7720c074cde8a278b44963c354")
 
-  if(USE_SANITIZER)
-    include(${cmake-scripts_SOURCE_DIR}/sanitizers.cmake)
-  endif()
-
   if(USE_STATIC_ANALYZER)
     if("clang-tidy" IN_LIST USE_STATIC_ANALYZER)
       set(CLANG_TIDY
