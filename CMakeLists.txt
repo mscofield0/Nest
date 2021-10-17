@@ -41,6 +41,12 @@ CPMAddPackage(
   OPTIONS "SPDLOG_INSTALL YES"
 )
 
+CPMAddPackage(
+  NAME concurrentqueue
+  GIT_TAG 07534961616f00728a99cbe864c5833c445cfd9b
+  GITHUB_REPOSITORY cameron314/concurrentqueue
+)
+
 # ==============================================
 # = Source files
 # ==============================================
@@ -56,13 +62,14 @@ add_library(${PROJECT_NAME} ${headers} ${sources})
 # ==============================================
 # = Target properties
 # ==============================================
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20)
 
 
 # ==============================================
 # = Compile options
 # ==============================================
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
+target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/await>")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   include(cmake/sanitizers.cmake)
@@ -72,7 +79,11 @@ endif()
 # ==============================================
 # = Link libraries
 # ==============================================
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+  fmt::fmt 
+  spdlog::spdlog 
+  concurrentqueue
+)
 
 
 # ==============================================
