@@ -18,7 +18,7 @@ option(TEST_INSTALLED_VERSION "Test the version found by find_package" OFF)
 include(../cmake/tools.cmake)
 include(../cmake/CPM.cmake)
 
-CPMAddPackage("gh:onqtam/doctest#2.4.6")
+CPMAddPackage("gh:onqtam/doctest#3414dc1eae7061a0b82d6ebd9d7f79f3239b19e0")
 CPMAddPackage("gh:TheLartians/Format.cmake@1.7.3")
 
 if(TEST_INSTALLED_VERSION)

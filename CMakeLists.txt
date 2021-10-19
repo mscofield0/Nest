@@ -41,12 +41,6 @@ CPMAddPackage(
   OPTIONS "SPDLOG_INSTALL YES"
 )
 
-CPMAddPackage(
-  NAME concurrentqueue
-  GIT_TAG 07534961616f00728a99cbe864c5833c445cfd9b
-  GITHUB_REPOSITORY cameron314/concurrentqueue
-)
-
 # ==============================================
 # = Source files
 # ==============================================
@@ -63,7 +57,11 @@ add_library(${PROJECT_NAME} ${headers} ${sources})
 # ==============================================
 # = Target properties
 # ==============================================
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
 
 # ==============================================
 # = Target definitions
@@ -79,9 +77,6 @@ elseif(MSVC)
   target_compile_options(${PROJECT_NAME} PUBLIC /W4 /permissive- /await)
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  include(cmake/sanitizers.cmake)
-  enable_sanitizers(${PROJECT_NAME} ${USE_SANITIZER})
 # ==============================================
 # = Sanitizers
 # ==============================================
@@ -97,7 +92,7 @@ enable_sanitizers(${PROJECT_NAME} ${USE_SANITIZER})
 # = Link libraries
 # ==============================================
 target_link_libraries(
-  ${PROJECT_NAME} PRIVATE fmt::fmt-header-only spdlog::spdlog_header_only concurrentqueue
+  ${PROJECT_NAME} PRIVATE fmt::fmt-header-only spdlog::spdlog_header_only
 )
 
 # ==============================================
@@ -108,13 +103,15 @@ target_include_directories(
                          $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
 
+target_include_directories(
+  ${PROJECT_NAME} PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/detail>
+)
+
 # ==============================================
 # = Generated headers
 # ==============================================
 set(VERSION_HEADER_LOCATION ${PROJECT_NAME}/Version.hxx)
 set(EXPORT_HEADER_LOCATION ${PROJECT_NAME}/Export.hxx)
-
-message("VERSION_HEADER_LOCATION: ${VERSION_HEADER_LOCATION}")
 
 # ==============================================
 # = Export project

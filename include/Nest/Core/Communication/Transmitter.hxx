@@ -31,7 +31,7 @@ public:
 	/// @param channel The channel to send to.
 	///
 	explicit Transmitter(std::shared_ptr<ChannelType> channel)
-		: channel_(channel) {}
+		: channel_(std::move(channel)) {}
 
 	/// @brief Sends a message to the channel.
 	///
@@ -45,8 +45,8 @@ public:
 	///
 	/// @param msg The message to sent to the channel.
 	///
-	void send(MessageType msg) const {
-		send(std::move(msg));
+	void send(MessageType const& msg) const {
+		channel_->send(msg);
 	}
 
 	/// @brief Tries to send a message to the channel.
@@ -67,8 +67,8 @@ public:
 	/// @return True if the message was sent successfully,
 	/// false otherwise.
 	///
-	bool try_send(MessageType msg) const {
-		return try_send(std::move(msg));
+	bool try_send(MessageType const& msg) const {
+		return channel_->try_send(msg);
 	}
 };
 

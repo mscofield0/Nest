@@ -1,6 +1,7 @@
 #ifndef NEST_CORE_COMMUNICATION_TUNNEL_HXX
 #define NEST_CORE_COMMUNICATION_TUNNEL_HXX
 
+#include <Nest/Core/Communication/Channel.hxx>
 #include <Nest/Core/Communication/Receiver.hxx>
 #include <Nest/Core/Communication/Transmitter.hxx>
 #include <Nest/Core/Utility/CommonTypes.hxx>
@@ -17,15 +18,22 @@ class Tunnel
 {
 	/// @brief A non-copyable Transmitter type.
 	///
-	struct Transmitter : public ::Nest::Core::Transmitter, Utility::NonCopyable
-	{};
+	struct Transmitter : public ::Nest::Core::Transmitter<MessageType>,
+						 Utility::NonCopyable
+	{
+		using ::Nest::Core::Transmitter<MessageType>::Transmitter;
+	};
 
 	/// @brief A non-copyable Receiver type.
 	///
-	struct Receiver : public ::Nest::Core::Receiver, Utility::NonCopyable
-	{};
+	struct Receiver : public ::Nest::Core::Receiver<MessageType>,
+					  Utility::NonCopyable
+	{
+		using ::Nest::Core::Receiver<MessageType>::Receiver;
+	};
 
 public:
+	using ChannelType = Channel<MessageType>;
 	using Tx = Tunnel::Transmitter;
 	using Rx = Tunnel::Receiver;
 
@@ -41,7 +49,7 @@ public:
 	/// @return The created Tunnel.
 	///
 	static Tunnel create(usize buffer_size) {
-		auto channel = std::make_shared<Channel>(buffer_size);
+		auto channel = std::make_shared<ChannelType>(buffer_size);
 
 		return {
 		  Tx(channel),
@@ -52,4 +60,4 @@ public:
 
 }	 // namespace Nest::Core
 
-#endif	  // NEST_CORE_ACTOR_CHANNEL_HXX
+#endif	  // NEST_CORE_COMMUNICATION_TUNNEL_HXX

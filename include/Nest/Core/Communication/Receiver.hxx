@@ -30,7 +30,7 @@ public:
 	/// @param channel The channel to listen to
 	///
 	explicit Receiver(std::shared_ptr<ChannelType> channel)
-		: channel_(channel) {}
+		: channel_(std::move(channel)) {}
 
 	/// @brief Blocks until it has received a message from the channel.
 	///
@@ -52,4 +52,4 @@ public:
 
 }	 // namespace Nest::Core
 
-#endif	  // NEST_CORE_COMMUNICATION_TRANSMITTER_HXX
+#endif	  // NEST_CORE_COMMUNICATION_RECEIVER_HXX
