@@ -1,13 +1,6 @@
-#include <Nest/Foo.hxx>
+#include <Nest/Version.hxx>
 #include <fmt/core.h>
 
-
-using namespace Nest;
-
-namespace Nest {
-
-void hello(std::string const& name) {
-	fmt::print("Hello {}\n", name);
+void print_version() {
+	fmt::print("{}", NEST_VERSION);
 }
-
-}	 // namespace Nest

@@ -6,7 +6,6 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(NestApp LANGUAGES CXX)
 set(MAIN_PROJECT "Nest")
 
-
 # ==============================================
 # = Dependencies
 # ==============================================
@@ -21,29 +20,26 @@ CPMAddPackage(
 
 CPMAddPackage(NAME ${MAIN_PROJECT} SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
 
-
 # ==============================================
 # = Source files
 # ==============================================
-file(GLOB headers CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hxx)
-file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx)
+file(GLOB_RECURSE headers CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hxx)
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx)
 
 # ==============================================
 # = Executable
 # ==============================================
 add_executable(${PROJECT_NAME} ${sources} ${headers})
 
-
 # ==============================================
 # = Target properties
 # ==============================================
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 OUTPUT_NAME "${MAIN_PROJECT}")
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 OUTPUT_NAME "${MAIN_PROJECT}")
 
 # ==============================================
 # = Compile options
 # ==============================================
 # --- empty
-
 
 # ==============================================
 # = Link libraries

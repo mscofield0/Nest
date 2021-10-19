@@ -21,4 +21,4 @@ using isize = std::ptrdiff_t;
 
 }	 // namespace Nest
 
-#endif // NEST_UTILITY_TYPES_HXX
+#endif	  // NEST_UTILITY_TYPES_HXX
