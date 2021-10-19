@@ -6,8 +6,11 @@ namespace Nest::Utility {
 class NonMovable
 {
 public:
+	NonMovable() = default;
+	NonMovable(NonMovable const&) = default;
+	NonMovable& operator=(NonMovable const&) = default;
 	NonMovable(NonMovable&&) = delete;
-	NonMovable operator=(NonMovable&&) = delete;
+	NonMovable& operator=(NonMovable&&) = delete;
 };
 
 }	 // namespace Nest::Utility

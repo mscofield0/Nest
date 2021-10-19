@@ -45,42 +45,61 @@ CPMAddPackage(
 # = Source files
 # ==============================================
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hxx")
-file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx")
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx"
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx"
+)
 
 # ==============================================
 # = Library
 # ==============================================
 add_library(${PROJECT_NAME} ${headers} ${sources})
 
-
 # ==============================================
 # = Target properties
 # ==============================================
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
+# ==============================================
+# = Target definitions
+# ==============================================
+# <empty>
 
 # ==============================================
 # = Compile options
 # ==============================================
-target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  target_compile_options(${PROJECT_NAME} PUBLIC -Wall -Wpedantic -Wextra -fcoroutines)
+elseif(MSVC)
+  target_compile_options(${PROJECT_NAME} PUBLIC /W4 /permissive- /await)
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   include(cmake/sanitizers.cmake)
   enable_sanitizers(${PROJECT_NAME} ${USE_SANITIZER})
+# ==============================================
+# = Sanitizers
+# ==============================================
+include(cmake/sanitizers.cmake)
+
+if(NOT DEFINED USE_SANITIZER)
+  set(USE_SANITIZER "")
 endif()
+
+enable_sanitizers(${PROJECT_NAME} ${USE_SANITIZER})
 
 # ==============================================
 # = Link libraries
 # ==============================================
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt spdlog::spdlog)
-
+target_link_libraries(
+  ${PROJECT_NAME} PRIVATE fmt::fmt-header-only spdlog::spdlog_header_only concurrentqueue
+)
 
 # ==============================================
 # = Include directories
 # ==============================================
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                  $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
+                         $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
 
 # ==============================================
@@ -89,6 +108,7 @@ target_include_directories(
 set(VERSION_HEADER_LOCATION ${PROJECT_NAME}/Version.hxx)
 set(EXPORT_HEADER_LOCATION ${PROJECT_NAME}/Export.hxx)
 
+message("VERSION_HEADER_LOCATION: ${VERSION_HEADER_LOCATION}")
 
 # ==============================================
 # = Export project
