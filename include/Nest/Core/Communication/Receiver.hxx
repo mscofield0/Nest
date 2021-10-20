@@ -11,13 +11,19 @@ namespace Nest::Core {
 ///
 /// @tparam MessageType Type that will be sent and received.
 ///
-template <typename MessageType>
+template <typename Message>
 class Receiver
 {
 public:
+	/// @brief The message type to receive
+	///
+	using MessageType = Message;
+
 	/// @brief The channel type to listen to
 	///
 	using ChannelType = Channel<MessageType>;
+
+
 
 private:
 	/// @brief The channel to listen to
