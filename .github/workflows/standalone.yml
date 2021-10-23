@@ -26,7 +26,7 @@ jobs:
           key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
 
       - name: configure
-        run: cmake -Sapp -Bbuild -DCMAKE_BUILD_TYPE=Debug -DUSE_CCACHE=True -DUSE_STATIC_ANALYZER="clang-tidy;cppcheck" -DUSE_SANITIZER="Address:Undefined:Leak"
+        run: cmake -Sapp -Bbuild -DCMAKE_BUILD_TYPE=Debug -GNinja -DUSE_CCACHE=True -DUSE_SANITIZER="Address:Undefined:Leak"
 
       - name: build
         run: cmake --build build -j4
