@@ -9,11 +9,15 @@ namespace Nest::Core {
 
 /// @brief An interface for sending and receiving messages from a queue.
 ///
-/// @tparam MessageType Type that will be sent and received.
+/// @tparam Message Type that will be sent and received.
 ///
-template <typename MessageType>
+template <typename Message>
 class Channel
 {
+public:
+	using MessageType = Message;
+
+private:
 	/// @brief The message buffer.
 	///
 	ConcurrentQueue<MessageType> queue_;

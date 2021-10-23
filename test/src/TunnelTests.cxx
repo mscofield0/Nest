@@ -4,9 +4,10 @@
 #include <doctest/doctest.h>
 
 #include <thread>
-#include <future>
+#include <chrono>
 
 using namespace Nest;
+using namespace std::chrono_literals;
 
 TEST_CASE("TunnelCommunicationWorks") {
 	auto [tx, rx] = Core::Tunnel<i32>::create(128);
@@ -26,6 +27,7 @@ void sender(Core::Concepts::Transmitter auto tx) {
 void receiver(Core::Concepts::Receiver auto rx) {
 	for (int i = 0; i < 100; ++i) {
 		rx.receive();
+		std::this_thread::sleep_for(500us);
 	}
 }
 

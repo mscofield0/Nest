@@ -4,25 +4,20 @@
 #include <memory>
 #include <utility>
 
-#include <Nest/Core/Communication/Channel.hxx>
+#include <Nest/Core/Communication/Concepts/Channel.hxx>
 
 namespace Nest::Core {
 
 /// @brief A type that only sends messages to the channel.
 ///
-/// @tparam MessageType Type that will be sent and received.
+/// @tparam Message Type that will be sent and received.
 ///
-template <typename Message>
+template <Concepts::Channel Channel>
 class Transmitter
 {
 public:
-	/// @brief The message type to receive
-	///
-	using MessageType = Message;
-
-	/// @brief The channel type to send to.
-	///
-	using ChannelType = Channel<MessageType>;
+	using ChannelType = Channel;
+	using MessageType = typename Channel::MessageType;
 
 private:
 	/// @brief The channel to send to.

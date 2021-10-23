@@ -1,7 +1,7 @@
 #ifndef NEST_CORE_COMMUNICATION_RECEIVER_HXX
 #define NEST_CORE_COMMUNICATION_RECEIVER_HXX
 
-#include <Nest/Core/Communication/Channel.hxx>
+#include <Nest/Core/Communication/Concepts/Channel.hxx>
 #include <Nest/Core/Utility/Optional.hxx>
 #include <memory>
 
@@ -9,21 +9,14 @@ namespace Nest::Core {
 
 /// @brief A type that only receives messages from the channel.
 ///
-/// @tparam MessageType Type that will be sent and received.
+/// @tparam Message Type that will be sent and received.
 ///
-template <typename Message>
+template <Concepts::Channel Channel>
 class Receiver
 {
 public:
-	/// @brief The message type to receive
-	///
-	using MessageType = Message;
-
-	/// @brief The channel type to listen to
-	///
-	using ChannelType = Channel<MessageType>;
-
-
+	using ChannelType = Channel;
+	using MessageType = typename Channel::MessageType;
 
 private:
 	/// @brief The channel to listen to

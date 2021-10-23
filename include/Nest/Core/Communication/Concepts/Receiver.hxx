@@ -6,13 +6,15 @@
 
 namespace Nest::Core::Concepts {
 
-template <typename Tx>
-concept Receiver = requires (Tx t) {
-  typename Tx::MessageType;
-  { t.receive() } -> std::same_as<typename Tx::MessageType>;
-  { t.try_receive() } -> std::same_as<Optional<typename Tx::MessageType>>;
+// clang-format off
+template <typename Rx>
+concept Receiver = requires (Rx t) {
+  typename Rx::MessageType;
+  { t.receive() } -> std::same_as<typename Rx::MessageType>;
+  { t.try_receive() } -> std::same_as<Optional<typename Rx::MessageType>>;
 };
+// clang-format on
 
-}
+}	 // namespace Nest::Core::Concepts
 
-#endif // NEST_CORE_COMMUNICATION_CONCEPTS_RECEIVER_HXX
+#endif	  // NEST_CORE_COMMUNICATION_CONCEPTS_RECEIVER_HXX

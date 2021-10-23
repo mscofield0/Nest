@@ -9,7 +9,7 @@ using namespace Nest;
 TEST_CASE("TransmitterSendWorks") {
 	auto channel = std::make_shared<Core::Channel<i32>>(20);
 
-	Core::Transmitter<i32> tx(channel);
+	Core::Transmitter tx(channel);
 	i32 sent = 42;
 	tx.send(sent);
 	i32 received = channel->receive();
@@ -19,7 +19,7 @@ TEST_CASE("TransmitterSendWorks") {
 TEST_CASE("TransmitterTrySendWorks") {
 	auto channel = std::make_shared<Core::Channel<i32>>(20);
 
-	Core::Transmitter<i32> tx(channel);
+	Core::Transmitter tx(channel);
 	i32 sent = 42;
 	tx.try_send(sent);
 	i32 received = channel->receive();

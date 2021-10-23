@@ -1,5 +1,5 @@
-#ifndef NEST_UTILITY_TYPES_HXX
-#define NEST_UTILITY_TYPES_HXX
+#ifndef NEST_CORE_UTILITY_TYPES_HXX
+#define NEST_CORE_UTILITY_TYPES_HXX
 
 #include <cstddef>
 #include <cstdint>
@@ -21,4 +21,4 @@ using isize = std::ptrdiff_t;
 
 }	 // namespace Nest
 
-#endif	  // NEST_UTILITY_TYPES_HXX
+#endif	  // NEST_CORE_UTILITY_TYPES_HXX
