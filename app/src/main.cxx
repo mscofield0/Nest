@@ -1,8 +1,5 @@
-#include <Nest/Foo.hxx>
-#include <Nest/Version.hxx>
+#include <cstdio>
 
 int main(int argc, char** argv) {
-	Nest::hello(argv[1]);
-
-	int* ptr = new int(42);
+	puts("Hello World!");
 }
