@@ -41,6 +41,12 @@ CPMAddPackage(
   OPTIONS "SPDLOG_INSTALL YES"
 )
 
+CPMAddPackage(
+        NAME concurrentqueue
+        GIT_TAG 07534961616f00728a99cbe864c5833c445cfd9b
+        GITHUB_REPOSITORY cameron314/concurrentqueue
+)
+
 # ==============================================
 # = Source files
 # ==============================================
@@ -94,6 +100,8 @@ enable_sanitizers(${PROJECT_NAME} ${USE_SANITIZER})
 target_link_libraries(
   ${PROJECT_NAME} PRIVATE fmt::fmt-header-only spdlog::spdlog_header_only
 )
+
+target_link_libraries(${PROJECT_NAME} PUBLIC concurrentqueue)
 
 # ==============================================
 # = Include directories

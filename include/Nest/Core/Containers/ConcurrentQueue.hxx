@@ -1,7 +1,7 @@
 #ifndef NEST_CORE_CONTAINERS_CONCURRENTQUEUE_HXX
 #define NEST_CORE_CONTAINERS_CONCURRENTQUEUE_HXX
 
-#include <Nest/Core/Containers/Detail/ConcurrentQueueImpl.hxx>
+#include "concurrentqueue.h"
 
 namespace Nest::Core {
 
