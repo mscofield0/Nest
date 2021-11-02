@@ -72,7 +72,18 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # ==============================================
 # = Target definitions
 # ==============================================
-# <empty>
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NEST_GCC)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "(Apple)?Clang")
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NEST_CLANG)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NEST_MSVC)
+endif()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NEST_DEBUG)
+endif()
+
 
 # ==============================================
 # = Compile options
