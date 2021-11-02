@@ -1,8 +1,8 @@
 #ifndef NEST_CORE_COMMUNICATION_CONCEPTS_RECEIVER_HXX
 #define NEST_CORE_COMMUNICATION_CONCEPTS_RECEIVER_HXX
 
+#include <Nest/Core/Utility/Concepts/Common.hxx>
 #include <Nest/Core/Utility/Optional.hxx>
-#include <concepts>
 
 namespace Nest::Core::Concepts {
 
@@ -10,8 +10,8 @@ namespace Nest::Core::Concepts {
 template <typename Rx>
 concept Receiver = requires (Rx t) {
   typename Rx::MessageType;
-  { t.receive() } -> std::same_as<typename Rx::MessageType>;
-  { t.try_receive() } -> std::same_as<Optional<typename Rx::MessageType>>;
+  { t.receive() } -> SameAs<typename Rx::MessageType>;
+  { t.try_receive() } -> SameAs<Optional<typename Rx::MessageType>>;
 };
 // clang-format on
 

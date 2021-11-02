@@ -2,7 +2,7 @@
 #define NEST_CORE_COMMUNICATION_CONCEPTS_CHANNEL_HXX
 
 #include <Nest/Core/Utility/Optional.hxx>
-#include <concepts>
+#include <Nest/Core/Utility/Concepts/Common.hxx>
 
 namespace Nest::Core::Concepts {
 
@@ -10,10 +10,10 @@ namespace Nest::Core::Concepts {
 template <typename C>
 concept Channel = requires (C c, typename C::MessageType m) {
   typename C::MessageType;
-  { c.send(m) } -> std::same_as<void>;
-  { c.try_send(m) } -> std::same_as<bool>;
-  { c.receive() } -> std::same_as<typename C::MessageType>;
-  { c.try_receive() } -> std::same_as<Optional<typename C::MessageType>>;
+  { c.send(m) } -> SameAs<void>;
+  { c.try_send(m) } -> SameAs<bool>;
+  { c.receive() } -> SameAs<typename C::MessageType>;
+  { c.try_receive() } -> SameAs<Optional<typename C::MessageType>>;
 };
 // clang-format on
 

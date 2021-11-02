@@ -3,6 +3,7 @@
 
 #include <Nest/Core/Utility/Assert.hxx>
 #include <Nest/Core/Utility/CommonTypes.hxx>
+#include <Nest/Core/Utility/Concepts/Common.hxx>
 #include <cstring>
 #include <new>
 #include <type_traits>
@@ -12,16 +13,22 @@ namespace Nest::Core {
 template <typename T>
 class Storage
 {
+	union StorageValueType {
+		T value;
+
+		StorageValueType() {}
+		~StorageValueType() {}
+	};
+
 public:
-	using AlignedType = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
 	using ValueType = T;
 
 private:
-	AlignedType* s_;
+	StorageValueType* s_;
 	usize size_;
 
 public:
-	explicit Storage(usize size) : s_(new AlignedType[size]), size_(size) {}
+	explicit Storage(usize size) : s_(new StorageValueType[size]), size_(size) {}
 
 	// Note: The user is required to call the dtors of each individual
 	// constructed object in the storage
@@ -29,21 +36,21 @@ public:
 		delete[] s_;
 	}
 
-	Storage(Storage& const other) requires std::is_copy_constructible_v<ValueType>
-		: s_(new AlignedType[other.size_]), size_(other.size_) {
+	Storage(Storage& const other) requires CopyConstructible<ValueType>
+		: s_(new StorageValueType[other.size_]), size_(other.size_) {
 		for (usize i = 0; i < size_; ++i) {
-			new (std::launder(&s_[i])) ValueType(other.get_at(i));
+			s_[i].value = ValueType(other.get_at(i));
 		}
 	}
 
-	Storage& operator=(Storage const& other) requires std::is_copy_constructible_v<ValueType> {
+	Storage& operator=(Storage const& other) requires std::is_copy_assignable_v<ValueType> {
 		if (this == &other) return *this;
 
 		size_ = other.size_;
 		delete[] s_;
-		s_ = new AlignedType[size_];
+		s_ = new StorageValueType[size_];
 		for (usize i = 0; i < size_; ++i) {
-			new (std::launder(&s_[i])) ValueType(other.get_at(i));
+			s_[i].value = ValueType(other.get_at(i));
 		}
 
 		return *this;
@@ -65,7 +72,7 @@ public:
 	}
 
 	void resize(usize new_size) {
-		auto* new_s = new AlignedType[new_size];
+		auto* new_s = new StorageValueType[new_size];
 
 		std::memcpy(new_s, s_, std::min(size_, new_size));
 		delete[] s_;
@@ -76,7 +83,7 @@ public:
 	void create_at(usize idx, Args&&... args) noexcept(std::is_nothrow_constructible_v<ValueType, Args...>) {
 		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
 
-		new (std::launder(&s_[idx])) T(std::forward<Args>(args)...);
+		s_[idx].value = ValueType(std::forward<Args>(args)...);
 	}
 
 	// clang-format off
@@ -86,30 +93,47 @@ public:
 	{
 		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
 
-		new (std::launder(&s_[idx])) ValueType(val);
+		s_[idx].value = ValueType(val);
 	}
+
+	void insert_at(usize idx, ValueType&& val)
+		noexcept(std::is_nothrow_copy_constructible_v<ValueType>)
+		requires std::is_copy_constructible_v<ValueType>
+	{
+		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
+
+		s_[idx].value = ValueType(std::move(val));
+	}
+
+	ValueType remove_at(usize idx)
+		noexcept(std::is_nothrow_move_constructible_v<ValueType>)
+		requires std::is_move_constructible_v<>
+	{
+		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
+
+		ValueType temp = std::move(s_[idx].value);
+		return temp;
+	}
+
 	// clang-format on
 
 	void destroy_at(usize idx) noexcept(std::is_nothrow_destructible_v<ValueType>) {
 		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
 
-		reinterpret_cast<ValueType*>(&s_[idx])->~ValueType();
+		s_[idx].value.~ValueType();
 	}
+
 
 	ValueType& get_at(usize idx) noexcept {
 		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
 
-		return reinterpret_cast<ValueType>(s_[idx]);
+		return s_[idx].value;
 	}
 
 	ValueType const& get_at(usize idx) const noexcept {
 		Utility::Assert(idx < size_, "Index out of bounds: {}", idx);
 
-		return reinterpret_cast<ValueType>(s_[idx]);
-	}
-
-	void zero_out() noexcept {
-		std::memset(s_, 0, size_);
+		return s_[idx].value;
 	}
 };
 

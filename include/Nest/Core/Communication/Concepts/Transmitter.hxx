@@ -1,7 +1,7 @@
 #ifndef NEST_CORE_COMMUNICATION_CONCEPTS_TRANSMITTER_HXX
 #define NEST_CORE_COMMUNICATION_CONCEPTS_TRANSMITTER_HXX
 
-#include <concepts>
+#include <Nest/Core/Utility/Concepts/Common.hxx>
 
 namespace Nest::Core::Concepts {
 
@@ -9,8 +9,8 @@ namespace Nest::Core::Concepts {
 template <typename Tx>
 concept Transmitter = requires (Tx t, typename Tx::MessageType m) {
   typename Tx::MessageType;
-  { t.send(m) } -> std::same_as<void>;
-  { t.try_send(m) } -> std::same_as<bool>;
+  { t.send(m) } -> SameAs<void>;
+  { t.try_send(m) } -> SameAs<bool>;
 };
 // clang-format on
 
