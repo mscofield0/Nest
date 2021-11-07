@@ -27,25 +27,10 @@ include(cmake/CPM.cmake)
 # PackageProject.cmake will be used to make our target installable
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
 
-CPMAddPackage(
-  NAME fmt
-  GIT_TAG 8.0.1
-  GITHUB_REPOSITORY fmtlib/fmt
-  OPTIONS "FMT_INSTALL YES"
-)
+# Include Conan
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
 
-CPMAddPackage(
-  NAME spdlog
-  GIT_TAG v1.9.2
-  GITHUB_REPOSITORY gabime/spdlog
-  OPTIONS "SPDLOG_INSTALL YES"
-)
-
-CPMAddPackage(
-        NAME concurrentqueue
-        GIT_TAG 07534961616f00728a99cbe864c5833c445cfd9b
-        GITHUB_REPOSITORY cameron314/concurrentqueue
-)
 
 # ==============================================
 # = Source files
@@ -109,10 +94,15 @@ enable_sanitizers(${PROJECT_NAME} ${USE_SANITIZER})
 # = Link libraries
 # ==============================================
 target_link_libraries(
-  ${PROJECT_NAME} PRIVATE fmt::fmt-header-only spdlog::spdlog_header_only
+  ${PROJECT_NAME} PRIVATE
+  CONAN_PKG::spdlog_header_only
+  CONAN_PKG::backward
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC concurrentqueue)
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  CONAN_PKG::fmt-header-only
+  CONAN_PKG::concurrentqueue
+)
 
 # ==============================================
 # = Include directories

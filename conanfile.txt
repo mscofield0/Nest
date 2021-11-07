@@ -1,0 +1,13 @@
+[requires]
+fmt/8.0.1
+spdlog/1.9.2
+backward-cpp/1.6
+concurrentqueue/1.0.3
+
+[options]
+fmt:shared=False
+spdlog:shared=False
+fmt:header_only=True
+spdlog:header_only=True
+backward-cpp:shared=True
+backward-cpp:shared=unwind

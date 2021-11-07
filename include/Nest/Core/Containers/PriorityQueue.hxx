@@ -4,6 +4,7 @@
 #include <Nest/Core/Utility/CommonTypes.hxx>
 #include <Nest/Core/Utility/Concepts/Trivial.hxx>
 #include <Nest/Core/Utility/Assert.hxx>
+#include <Nest/Core/Containers/CircularBuffer.hxx>
 #include <memory>
 
 namespace Nest::Core {
@@ -11,31 +12,21 @@ namespace Nest::Core {
 template <typename T>
 class PriorityQueue
 {
-	std::unique_ptr<std::aligned_storage<>> field_;
-	usize root_;
-	usize head_;
+public:
+	using ValueType = T;
 
-	void push_impl(T const& val) {
-		field_[head_] = val;
-		head_ = (head_ + 1) % field_.size();
-	}
-
-	void push_impl(T&& val) {
-		field_[head_] = std::move(val);
-	}
+private:
+	CircularBuffer<ValueType> buf_;
 
 public:
-	explicit PriorityQueue(usize buf_size) : field_(buf_size), root_{0}, head_{0} {}
+	explicit PriorityQueue(usize buf_size) : buf_(buf_size) {}
 
-	void push(T const& val) {
-		Assert(head_ + 1 != root_, "The queue is already full!");
-
-		field_[head_] = val;
-
+	void push(ValueType const& val) {
+		buf_.enqueue(val);
 	}
 
-	void push(T&& val) {
-		field_.push_back(std::move(val));
+	void push(ValueType&& val) {
+		buf_.push_back(std::move(val));
 	}
 
 	T pop() {
