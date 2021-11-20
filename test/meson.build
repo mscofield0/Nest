@@ -10,6 +10,7 @@ subdir('src')
 all_test_deps = []
 all_test_dep_libs = []
 
+doctest_dep = dependency('onqtam-doctest', fallback: ['onqtam-doctest', 'doctest_dep'])
 thread_dep = dependency('threads')
 
 all_test_deps += [

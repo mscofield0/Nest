@@ -1,4 +1,4 @@
-test_src += files(
+all_test_src += files(
     'OneshotTests.cxx',
     'ReceiverTests.cxx',
     'TransmitterTests.cxx',

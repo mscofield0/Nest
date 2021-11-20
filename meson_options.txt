@@ -7,13 +7,13 @@
 option('build-app',
   type: 'boolean',
   value: false,
-  description 'Builds the application.'
+  description: 'Builds the application.'
 )
 
 option('enable-tests',
   type: 'boolean',
   value: true,
-  description 'Enables tests.'
+  description: 'Enables tests.'
 )
 
 option('enable-benchmark',

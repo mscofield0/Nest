@@ -10,11 +10,11 @@ subdir('src')
 all_benchmark_deps = []
 all_benchmark_dep_libs = []
 
-benchmark_dep = benchmark.get_variable('google_benchmark_dep')
+benchmark_dep = dependency('google-benchmark', fallback: ['google-benchmark', 'google_benchmark_dep'])
 thread_dep = dependency('threads')
 
 all_benchmark_deps += [
-    gbenchmark_dep,
+    benchmark_dep,
     thread_dep
 ]
 
