@@ -1,5 +1,26 @@
 all_lib_headers += files(
-    'Nest/Foo.hxx'
+    'Nest/Foo.hxx',
+
+    # Nest.Core.Utility
+    'Nest/Core/Utility/Atomic.hxx',
+    'Nest/Core/Utility/CommonTypes.hxx',
+    'Nest/Core/Utility/Optional.hxx',
+    'Nest/Core/Utility/Traits/NonCopyable.hxx',
+    'Nest/Core/Utility/Traits/NonMovable.hxx',
+
+    # Nest.Core.Containers
+    'Nest/Core/Containers/ConcurrentQueue.hxx',
+
+    # Nest.Core.Communication
+    'Nest/Core/Communication/Channel.hxx',
+    'Nest/Core/Communication/Oneshot.hxx',
+    'Nest/Core/Communication/OneshotChannel.hxx',
+    'Nest/Core/Communication/Receiver.hxx',
+    'Nest/Core/Communication/Transmitter.hxx',
+    'Nest/Core/Communication/Tunnel.hxx',
+    'Nest/Core/Communication/Concepts/Channel.hxx',
+    'Nest/Core/Communication/Concepts/Receiver.hxx',
+    'Nest/Core/Communication/Concepts/Transmitter.hxx',
 )
 
 
