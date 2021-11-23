@@ -1,0 +1,2 @@
+# =========== Include examples
+subdir('foo')

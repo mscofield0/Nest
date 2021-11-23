@@ -1,9 +1,10 @@
 #pragma once
 
 #include <string>
+#include <Nest/Export.hxx>
 
 namespace Nest {
 
-void hello(std::string const& name);
+std::string hello(std::string const& name);
 
 }	 // namespace Nest

@@ -14,10 +14,8 @@ project(
 lib_args = ['-DBUILDING_NEST']
 
 # =========== Source files
-all_lib_src = []
-all_lib_headers = []
-all_test_src  = []
-all_benchmark_src = []
+lib_src = []
+lib_headers = []
 
 lib_include_dir = include_directories('include')
 lib_include_dirs = [lib_include_dir]
@@ -26,7 +24,7 @@ subdir('src')
 subdir('include')
 
 # =========== Dependencies
-all_lib_deps = []
+lib_deps = []
 
 spdlog_dep = dependency('spdlog', 
   version: '1.9.2',
@@ -38,15 +36,15 @@ fmt_dep = dependency('fmt',
   fallback: ['fmt', 'fmt_dep']
 )
 
-all_lib_deps += spdlog_dep
-all_lib_deps += fmt_dep
+lib_deps += spdlog_dep
+lib_deps += fmt_dep
 
 # =========== Libraries
 lib = library(
   meson.project_name(), 
-  sources: all_lib_src,
+  sources: lib_src,
   include_directories: lib_include_dirs,
-  dependencies: all_lib_deps,
+  dependencies: lib_deps,
   install: true,
 )
 
@@ -59,7 +57,7 @@ lib_dep = declare_dependency(
 )
 
 install_headers(
-  all_lib_headers, 
+  lib_headers, 
   subdir: 'include',
 )
 
@@ -74,13 +72,10 @@ pkg.generate(
 )
 
 # =========== Test, benchmark and app enabling
-subdir('app')
 subdir('test')
+subdir('app')
 subdir('benchmark')
-# if get_option('run-examples')
-#   subdir('examples')
-# endif
-
+subdir('examples')
 subdir('docs')
 
 # =========== Formatting target
@@ -93,10 +88,11 @@ configure_file(
 run_target('format',
   command: [
     'clang-format', '-i', '-style=file',
-    all_lib_src,
-    all_lib_headers,
-    all_test_src,
-    all_benchmark_src,
+    lib_src,
+    lib_headers,
+    app_src,
+    app_headers,
+    benchmark_src,
   ]
 )
 
@@ -113,7 +109,7 @@ run_target('tidy',
     '-fix', 
     '-j', '8', 
     'files', 
-    '^((?!(third_party|tests|benchmarks|gtest)).)*$', 
+    '^((?!(test|benchmark)).)*$', 
     '-format', 
     '-p=' + meson.build_root()
   ]

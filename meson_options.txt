@@ -1,5 +1,0 @@
-# option('run-examples',
-#   type: 'boolean',
-#   value: false,
-#   description 'Runs the examples.'
-# )

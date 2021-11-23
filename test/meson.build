@@ -1,27 +1,21 @@
-# =========== Source files
-all_test_src = []
+# =========== Test bootstrap
 test_bootstrap = files('Bootstrap.cxx')
 
-all_test_src += test_bootstrap
-
-subdir('src')
-
 # =========== Dependencies
-all_test_deps = []
-all_test_dep_libs = []
-
-doctest_dep = dependency('onqtam-doctest', fallback: ['onqtam-doctest', 'doctest_dep'])
-thread_dep = dependency('threads')
-
-all_test_deps += [
-    doctest_dep, 
-    thread_dep
+test_deps = [
+  lib_dep,
 ]
 
-# =========== Build tests
-all_tests = executable('all_tests', 
-  sources: all_test_src, 
-  include_directories: lib_include_dirs, 
-  dependencies: all_test_deps, 
-  link_with: all_test_dep_libs
+test_dep_libs = [
+  lib,
+]
+
+doctest_dep = dependency('onqtam-doctest', 
+  version: '2.4.0',
+  fallback: ['onqtam-doctest', 'doctest_dep'],
 )
+
+test_deps += doctest_dep
+
+# =========== Include the tests 
+subdir('src')

@@ -1,3 +1,3 @@
-all_lib_src += files(
+lib_src += files(
     'Foo.cxx'
 )
