@@ -5,6 +5,8 @@ example_foo_main = files('Main.cxx')
 example_foo_deps = []
 example_foo_dep_libs = []
 
+subdir('deps')
+
 # =========== Build app
 example_foo = executable('foo', 
   sources: example_foo_main, 

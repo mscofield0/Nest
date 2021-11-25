@@ -17,26 +17,18 @@ env:
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
+      - uses: hendrikmuhs/ccache-action@v1
         with:
-          path: "**/cpm_modules"
-          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
-
+          key: build-${{ hashFiles('**/deps/meson.build') }}
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
       - name: Install dependencies
         run: |
-          brew install ninja gcc@10
-
-      - name: configure
-        run: CXX=g++-10 cmake -Stest -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug -DUSE_CCACHE=True -DUSE_SANITIZER="Address:Undefined:Leak"
-
-      - name: build
-        run: cmake --build build -j4
-
-      - name: test
-        run: |
-          cd build
-          ctest --build-config Debug
+          pip install meson ninja
+      - name: Setup
+        run: meson setup build
+      - name: Build and run tests
+        run: ninja test -C build -v -Db_sanitize=address,undefined

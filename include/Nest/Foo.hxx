@@ -5,6 +5,6 @@
 
 namespace Nest {
 
-std::string hello(std::string const& name);
+NEST_API std::string hello(std::string const& name);
 
 }	 // namespace Nest

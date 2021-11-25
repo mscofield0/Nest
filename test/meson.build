@@ -2,20 +2,10 @@
 test_bootstrap = files('Bootstrap.cxx')
 
 # =========== Dependencies
-test_deps = [
-  lib_dep,
-]
+test_deps = []
+test_dep_libs = []
 
-test_dep_libs = [
-  lib,
-]
-
-doctest_dep = dependency('onqtam-doctest', 
-  version: '2.4.0',
-  fallback: ['onqtam-doctest', 'doctest_dep'],
-)
-
-test_deps += doctest_dep
+subdir('deps')
 
 # =========== Include the tests 
 subdir('src')

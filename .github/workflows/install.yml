@@ -10,39 +10,64 @@ on:
       - master
       - develop
 
-env:
-  CTEST_OUTPUT_ON_FAILURE: 1
-  CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
-
 jobs:
-  build:
+  build-ubuntu:
+    name: Check if install works on Ubuntu (Linux)
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
+      - uses: hendrikmuhs/ccache-action@v1
         with:
-          path: "**/cpm_modules"
-          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
-
+          key: build-${{ hashFiles('**/deps/meson.build') }}
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
       - name: Install dependencies
         run: |
-          sudo apt install ninja-build g++-10
-
-      - name: build and install library
+          pip install meson ninja
+      - name: Setup
+        run: meson setup build
+      - name: Build and install library
+        run: ninja install -C build -v
+      - name: Test installed library
+        run: ninja test -C build -DBUILD_WITH_INSTALLED -v
+  build-macos:
+    name: Check if install works on MacOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: build-${{ hashFiles('**/deps/meson.build') }}
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
         run: |
-          CXX=g++-10 cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DUSE_CCACHE=True -DUSE_SANITIZER="Address:Undefined:Leak"
-          sudo cmake --build build --target install
-          rm -rf build
-
-      - name: configure
-        run: CXX=g++-10 cmake -Stest -Bbuild -GNinja -DTEST_INSTALLED_VERSION=1
-
-      - name: build
-        run: cmake --build build --config Debug -j4
-
-      - name: test
+          pip install meson ninja
+      - name: Setup
+        run: meson setup build
+      - name: Build and install library
+        run: ninja install -C build -v
+      - name: Test installed library
+        run: ninja test -C build -DBUILD_WITH_INSTALLED -v
+  build-windows:
+    name: Check if install works on Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: build-${{ hashFiles('**/deps/meson.build') }}
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
         run: |
-          cd build
-          ctest --build-config Debug
+          pip install meson ninja
+      - name: Setup
+        run: meson setup build
+      - name: Build and install library
+        run: ninja install -C build -v
+      - name: Test installed library
+        run: ninja test -C build -DBUILD_WITH_INSTALLED -v

@@ -10,29 +10,22 @@ on:
       - master
       - develop
 
-env:
-  CTEST_OUTPUT_ON_FAILURE: 1
-  CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
-
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
+      - uses: hendrikmuhs/ccache-action@v1
         with:
-          path: "**/cpm_modules"
-          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
-
-      - name: configure
-        run: cmake -Stest -Bbuild -G "Visual Studio 16 2019" -DUSE_CCACHE=True -DUSE_SANITIZER="Undefined"
-
-      - name: build
-        run: cmake --build build --config Debug -j4
-
-      - name: test
+          key: build-${{ hashFiles('**/deps/meson.build') }}
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
         run: |
-          cd build
-          ctest --build-config Debug
+          pip install meson ninja
+      - name: Setup
+        run: meson setup build
+      - name: Build and run tests
+        run: ninja test -C build -v -Db_sanitize=address,undefined
+

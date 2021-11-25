@@ -15,6 +15,8 @@ subdir('include')
 app_deps = []
 app_dep_libs = []
 
+subdir('deps')
+
 # =========== Build app
 app = executable(meson.project_name(), 
   sources: app_src, 

@@ -10,9 +10,6 @@ project(
   ]
 )
 
-# =========== Project definitions
-lib_args = ['-DBUILDING_NEST']
-
 # =========== Source files
 lib_src = []
 lib_headers = []
@@ -26,18 +23,10 @@ subdir('include')
 # =========== Dependencies
 lib_deps = []
 
-spdlog_dep = dependency('spdlog', 
-  version: '1.9.2',
-  fallback: ['spdlog', 'spdlog_dep']
-)
+subdir('deps')
 
-fmt_dep = dependency('fmt',
-  version: '8.0.1',
-  fallback: ['fmt', 'fmt_dep']
-)
-
-lib_deps += spdlog_dep
-lib_deps += fmt_dep
+# =========== Project definitions
+lib_args = ['-DBUILDING_NEST']
 
 # =========== Libraries
 lib = library(
@@ -46,6 +35,7 @@ lib = library(
   include_directories: lib_include_dirs,
   dependencies: lib_deps,
   install: true,
+  cpp_args: lib_args,
 )
 
 libs = [lib]
@@ -55,6 +45,12 @@ lib_dep = declare_dependency(
   include_directories: lib_include_dirs,
   link_with: libs,
 )
+
+if get_option('BUILD_WITH_INSTALLED')
+  lib_dep_for_tests = dependency(meson.project_name(), allow_fallback: false)
+else
+  lib_dep_for_tests = lib_dep
+endif
 
 install_headers(
   lib_headers, 
@@ -72,11 +68,13 @@ pkg.generate(
 )
 
 # =========== Test, benchmark and app enabling
-subdir('test')
-subdir('app')
-subdir('benchmark')
-subdir('examples')
-subdir('docs')
+if not meson.is_subproject()
+  subdir('test')
+  subdir('app')
+  subdir('benchmark')
+  subdir('examples')
+  subdir('docs')
+endif
 
 # =========== Formatting target
 configure_file(

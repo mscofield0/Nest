@@ -1,0 +1,5 @@
+option('BUILD_WITH_INSTALLED',
+  type: 'boolean',
+  value: false,
+  description: 'Builds the project with the installed version of the library',
+)
