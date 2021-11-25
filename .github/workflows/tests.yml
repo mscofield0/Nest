@@ -1,4 +1,4 @@
-name: Install
+name: Tests
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
 
 jobs:
   build-ubuntu:
-    name: Check if install works on Ubuntu (Linux)
+    name: Run tests on Ubuntu (Linux)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,11 +30,17 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype debugoptimized --debug -DENABLE_TESTS=true -Db_sanitize=address,undefined build
+      - name: Build library
+        run: ninja -C build -v
+      - name: Run tests
+        run: ninja test -C build
+      - name: Collect code coverage
+        run: |
+          ninja coverage-html -C build
+          bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
   build-macos:
-    name: Check if install works on MacOS
+    name: Run tests on MacOS
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -50,11 +56,13 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype debugoptimized --debug -DENABLE_TESTS=true -Db_sanitize=address,undefined build
+      - name: Build library
+        run: ninja -C build -v
+      - name: Run tests
+        run: ninja test -C build
   build-windows:
-    name: Check if install works on Windows
+    name: Run tests on Windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,6 +78,8 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype debugoptimized --debug -DENABLE_TESTS=true -Db_sanitize=address,undefined build
+      - name: Build library
+        run: ninja -C build -v
+      - name: Run tests
+        run: ninja test -C build

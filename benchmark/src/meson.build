@@ -1,3 +1,2 @@
-benchmark_src += files(
-    'Foo.cxx'
-)
+# =========== Specify benchmarks to be included
+subdir('Nest/Foo')

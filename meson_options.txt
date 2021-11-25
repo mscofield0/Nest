@@ -1,5 +1,29 @@
 option('BUILD_WITH_INSTALLED',
   type: 'boolean',
   value: false,
-  description: 'Builds the project with the installed version of the library',
+  description: 'Builds the target with the installed version of the library',
+)
+
+option('ENABLE_TESTS',
+  type: 'boolean',
+  value: false,
+  description: 'Enables tests',
+)
+
+option('ENABLE_APP',
+  type: 'boolean',
+  value: false,
+  description: 'Enables the app',
+)
+
+option('ENABLE_BENCHMARK',
+  type: 'boolean',
+  value: false,
+  description: 'Enables the benchmark',
+)
+
+option('ENABLE_EXAMPLES',
+  type: 'boolean',
+  value: false,
+  description: 'Enables the examples',
 )

@@ -1,20 +1,20 @@
-name: Install
+name: Application
 
 on:
   push:
     branches:
       - master
       - develop
-      - feature/*
+      - app
   pull_request:
     branches:
       - master
       - develop
-      - feature/*
+      - app
 
 jobs:
   build-ubuntu:
-    name: Check if install works on Ubuntu (Linux)
+    name: Build app on Ubuntu (Linux)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,11 +30,11 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype release -DENABLE_APP=true build
+      - name: Build library
+        run: ninja -C build -v
   build-macos:
-    name: Check if install works on MacOS
+    name: Build app on MacOS
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -50,11 +50,11 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype release -DENABLE_APP=true build
+      - name: Build library
+        run: ninja -C build -v
   build-windows:
-    name: Check if install works on Windows
+    name: Build app on Windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,6 +70,6 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype release -DENABLE_APP=true build
+      - name: Build library
+        run: ninja -C build -v

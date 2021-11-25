@@ -1,6 +1,6 @@
 # =========== Source files
 foo_test_src = files(
-  'FooTest.cxx',
+  'Foo.cxx',
 )
 
 # =========== Dependencies

@@ -6,7 +6,7 @@ project(
     'default_library=shared',
     'buildtype=debugoptimized',
     'warning_level=3', 
-    'cpp_std=c++2a'
+    'cpp_std=c++20'
   ]
 )
 
@@ -41,15 +41,13 @@ lib = library(
 libs = [lib]
 
 # =========== Library export
-lib_dep = declare_dependency(
-  include_directories: lib_include_dirs,
-  link_with: libs,
-)
-
 if get_option('BUILD_WITH_INSTALLED')
-  lib_dep_for_tests = dependency(meson.project_name(), allow_fallback: false)
+  lib_dep = dependency(meson.project_name(), allow_fallback: false)
 else
-  lib_dep_for_tests = lib_dep
+  lib_dep = declare_dependency(
+    include_directories: lib_include_dirs,
+    link_with: libs,
+  )
 endif
 
 install_headers(
@@ -69,10 +67,19 @@ pkg.generate(
 
 # =========== Test, benchmark and app enabling
 if not meson.is_subproject()
-  subdir('test')
-  subdir('app')
-  subdir('benchmark')
-  subdir('examples')
+  if get_option('ENABLE_TESTS')
+    subdir('test')
+  endif
+  if get_option('ENABLE_APP')
+    subdir('app')
+  endif
+  if get_option('ENABLE_BENCHMARK')
+    subdir('benchmark')
+  endif
+  if get_option('ENABLE_EXAMPLES')
+    subdir('examples')
+  endif
+
   subdir('docs')
 endif
 
