@@ -79,8 +79,9 @@ if not meson.is_subproject()
   if get_option('ENABLE_EXAMPLES')
     subdir('examples')
   endif
-
-  subdir('docs')
+  if get_option('ENABLE_DOCS')
+    subdir('docs')
+  endif
 endif
 
 # =========== Formatting target

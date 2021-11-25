@@ -21,6 +21,10 @@ jobs:
         run: |
           sudo apt install doxygen
           pip install meson ninja jinja2 Pygments libgs
+      -name: Fetch m.css 
+        run: |
+          git submodule update --init --recursive
+          git submodule update --recursive --remote
       - name: Setup
         run: meson setup build
       - name: Generate docs

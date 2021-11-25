@@ -27,3 +27,9 @@ option('ENABLE_EXAMPLES',
   value: false,
   description: 'Enables the examples',
 )
+
+option('ENABLE_DOCS',
+  type: 'boolean',
+  value: false,
+  description: 'Enables docs',
+)
