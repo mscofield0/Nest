@@ -1,6 +1,8 @@
 # =========== Source files
 example_foo_main = files('Main.cxx')
 
+examples_src += example_foo_main
+
 # =========== Dependencies
 example_foo_deps = []
 example_foo_dep_libs = []

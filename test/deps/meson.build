@@ -4,8 +4,10 @@ doctest_dep = dependency('onqtam-doctest',
 )
 
 test_deps += [
-  lib_dep_for_tests,
+  lib_dep,
   doctest_dep,
 ]
 
-test_dep_libs += []
+test_dep_libs += [
+  lib,
+]

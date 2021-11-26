@@ -1,5 +1,6 @@
-# =========== Test bootstrap
+# =========== Source files
 test_bootstrap = files('Bootstrap.cxx')
+test_src = [test_bootstrap]
 
 # =========== Dependencies
 test_deps = []

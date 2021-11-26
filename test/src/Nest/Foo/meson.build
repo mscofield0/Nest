@@ -3,6 +3,8 @@ foo_test_src = files(
   'Foo.cxx',
 )
 
+test_src += foo_test_src
+
 # =========== Dependencies
 foo_test_deps = []
 foo_test_lib_deps = []
