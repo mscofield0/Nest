@@ -3,4 +3,7 @@
 .DS_Store
 .idea
 !.idea/cmake.xml
-*build*
+/build
+/subprojects
+!/subprojects/*.wrap
+/.cache

@@ -1,0 +1,3 @@
+app_src += files(
+    'Foo.cxx'
+)

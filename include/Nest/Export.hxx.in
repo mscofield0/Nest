@@ -1,0 +1,15 @@
+#ifndef @UPPERCASE_PROJECT_NAME@_EXPORT_HXX
+#define @UPPERCASE_PROJECT_NAME@_EXPORT_HXX
+
+#if BUILDING_@UPPERCASE_PROJECT_NAME@ && HAVE_VISIBILITY
+#   define @UPPERCASE_PROJECT_NAME@_API __attribute__((__visibility__("default")))
+#elif BUILDING_@UPPERCASE_PROJECT_NAME@ && defined _MSC_VER
+#   define @UPPERCASE_PROJECT_NAME@_API __declspec(dllexport)
+#elif defined _MSC_VER
+#   define @UPPERCASE_PROJECT_NAME@_API __declspec(dllimport)
+#else
+#   define @UPPERCASE_PROJECT_NAME@_API
+#endif
+
+
+#endif // @UPPERCASE_PROJECT_NAME@_EXPORT_HXX

@@ -1,20 +1,18 @@
-name: Install
+name: Benchmarks
 
 on:
   push:
     branches:
       - master
       - develop
-      - feature/*
   pull_request:
     branches:
       - master
       - develop
-      - feature/*
 
 jobs:
   build-ubuntu:
-    name: Check if install works on Ubuntu (Linux)
+    name: Run benchmarks on Ubuntu (Linux)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,11 +28,13 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype release -DENABLE_BENCHMARKS=true build
+      - name: Build library
+        run: ninja -C build -v
+      - name: Run benchmarks
+        run: ninja test --benchmark -C build
   build-macos:
-    name: Check if install works on MacOS
+    name: Run benchmarks on MacOS
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -50,11 +50,13 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype release -DENABLE_BENCHMARKS=true build
+      - name: Build library
+        run: ninja -C build -v
+      - name: Run benchmarks
+        run: ninja test --benchmark -C build
   build-windows:
-    name: Check if install works on Windows
+    name: Run benchmarks on Windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,6 +72,8 @@ jobs:
       - name: Setup
         run: |
           meson setup build
-          meson configure -DBUILD_WITH_INSTALLED build
-      - name: Build and install library
-        run: ninja install -C build -v
+          meson configure --buildtype release -DENABLE_BENCHMARKS=true build
+      - name: Build library
+        run: ninja -C build -v
+      - name: Run benchmarks
+        run: ninja test --benchmark -C build

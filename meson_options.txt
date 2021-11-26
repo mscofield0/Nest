@@ -1,0 +1,35 @@
+option('with_installed',
+  type: 'boolean',
+  value: false,
+  description: 'Builds the target with the installed version of the library',
+)
+
+option('tests',
+  type: 'boolean',
+  value: false,
+  description: 'Enables tests',
+)
+
+option('app',
+  type: 'boolean',
+  value: false,
+  description: 'Enables the app',
+)
+
+option('benchmarks',
+  type: 'boolean',
+  value: false,
+  description: 'Enables the benchmark',
+)
+
+option('examples',
+  type: 'boolean',
+  value: false,
+  description: 'Enables the examples',
+)
+
+option('docs',
+  type: 'boolean',
+  value: false,
+  description: 'Enables docs',
+)

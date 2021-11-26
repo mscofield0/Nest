@@ -1,9 +1,6 @@
-#include <Nest/Version.hxx>
-#include <Nest/Core/Communication/Tunnel.hxx>
+#include <Nest/Foo.hxx>
 #include <fmt/core.h>
 
-void print_version() {
-	fmt::print("{}", NEST_VERSION);
-
-    auto [tx, rx] = Nest::Core::Tunnel<int>::create(128);
+std::string hello(std::string const& name) {
+    return fmt::format("Hello {}", name);
 }
